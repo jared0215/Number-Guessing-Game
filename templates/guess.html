@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous" defer></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Guess</title>
+</head>
+<body>
+    <h1 class="display-1 text-center">Welcome to the Great Number Game!</h1>
+    <h6 class="display-6 text-center">I am thinking of a number between 1 and 100</h6>
+    <h6 class="display-6 text-center">Take a Guess!</h6>
+    
+    <div class="main">
+        <div class="box mx-auto" {% if correct == true and session['tracker'] <= 5 %}style="background-color: green;"{% endif %}>
+        {% if session['tracker'] < 5 %}
+            {% if correct == true %}
+                <h3 class="mb-2 mx-auto text-cent">{{ session['ran_num'] }} was the number!</h3>
+                <form action="/">
+                    <input type="submit" value="Play Again!" name="again" class="mx-auto align-middle btn btn-dark mb-2">
+                    <div class="mx-auto">
+                        <h6 class="mb-2"> It only took you {{ session['tracker'] }} attempt(s)</h6>
+                    </div>
+                </form>
+            {% elif  guess_num > 100 %}
+                <h3 class="mx-auto text-cent">{{ guess_num }} is not a valid number. Please guess numbers between 1 and 100!</h3>
+            {% elif  guess_num < 1 %}
+                <h3 class="mx-auto text-cent">{{ guess_num }} is not a valid number. Please guess numbers between 1 and 100!</h3>
+            {% elif correct == false and guess_num > session['ran_num'] %}
+                <h3>{{ guess_num }} was too high!</h3>
+            {% elif correct == false and guess_num < session['ran_num'] %}
+                <h3>{{ guess_num }} was too low!</h3>
+            {% endif %}
+        {% elif session['tracker'] == 5 and correct == true %}
+            <h3 class="mb-2 mx-auto text-cent">{{ session['ran_num'] }} was the number!</h3>
+            <form action="/">
+                <input type="submit" value="Play Again!" name="again" class="mx-auto align-middle btn btn-dark mb-2">
+                <div class="mx-auto">
+                    <h6 class="mb-2"> It only took you {{ session['tracker'] }} attempt(s)</h6>
+                </div>
+            </form>
+        {% elif session['tracker'] == 5 and correct != true %}
+            <h3 class="mb-2 mx-auto text-cent">You tried to guess the number {{ session['tracker'] }} times and failed... Try again! The number was {{ session['ran_num'] }}!</h3>
+            <form action="/">
+                <input type="submit" value="Play Again!" name="again" class="mx-auto align-middle btn btn-dark mb-2">
+            </form>
+        {% endif %}
+        </div>
+        {% if correct != true and session['tracker'] < 5 %}
+            <div class="tracker mx-auto">
+                {% if session['tracker'] < 4 %}
+                <h6 class="mb-2">
+                    Guess Number: {{ session['tracker'] }} </h6>
+                {% else %}
+                <h6 class="mb-2">
+                    Last guess! Make it count! </h6>
+                {% endif %}
+            </div>
+            <div class="mx-auto">
+                <form action="/guess" class="mx-auto border border-primary bg-primary p-3 rounded">
+                    <input type="number" class="mb form-control" name="guess" placeholder="Enter your guess...">
+                    <input type="submit" class="align-middle btn btn-success" value="Submit">
+                </form>
+            </div>
+        {% endif %}
+        {% if correct == true %}
+        <div class="leaderboard">
+            <form action="/leaderboard" method="post">
+                <div class="row mb-2">
+                    <h6 class="mb-2 mx-auto text-cent display-6"> Submit your win to the leaderboard!</h6>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First name" aria-label="First name" name="first_name">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Last name" aria-label="Last name" name="last_name">
+                    </div>
+                </div>
+                <input type="hidden" name="attemps" value="{{ session['tracker'] }}">
+                <div class="d-grid gap-2">
+                    <input class="btn btn-success" type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

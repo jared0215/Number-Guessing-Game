@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.mb {
+    margin-bottom: 15px !important;
+}
+.mb-2 {
+    margin-bottom: 25px !important;
+}
+.mx-auto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.text-cent {
+    text-align: center;
+}
+.box {
+    background-color: red;
+    height: 300px;
+    width: 300px;
+    margin-bottom: 15px;
+    color: white;
+}
+.form-control, .form-control:focus, .form-control::placeholder  {
+    background-color: #2B3035;
+    color: white;
+}
+.main-2 {
+    width: 60%;
+}
